@@ -30,8 +30,11 @@ namespace NGK3.Controllers
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
+                Location = new Location{Name = "Chokoladen", Lat = 56.17, Lon = 10.18 },
                 TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
+                Humidity = rng.Next(0, 101),
+                AirPressure = rng.Next(980, 1030)
+
             })
             .ToArray();
         }
