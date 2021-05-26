@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using NGK3.Data;
 
 namespace NGK3
 {
@@ -32,6 +34,11 @@ namespace NGK3
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NGK3", Version = "v1" });
             });
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("NGK3Context")));
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
