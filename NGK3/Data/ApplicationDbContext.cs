@@ -15,5 +15,6 @@ namespace NGK3.Data
         }
 
         public DbSet<NGK3.Data.Models.User> Users { get; set; }
+        public DbSet<NGK3.Data.Models.WeatherForecast> WeatherForecasts { get; set; }
     }
 }

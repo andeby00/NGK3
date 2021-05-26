@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
+using NGK3.Data.Models;
 
 namespace NGK3.Controllers
 {
@@ -29,6 +31,7 @@ namespace NGK3.Controllers
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
+                Id = index,
                 Date = DateTime.Now.AddDays(index),
                 Location = new Location{Name = "Chokoladen", Lat = 56.17, Lon = 10.18 },
                 TemperatureC = rng.Next(-20, 55),
@@ -37,6 +40,13 @@ namespace NGK3.Controllers
 
             })
             .ToArray();
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<WeatherForecast>>> GetLatetestForecasts()
+        {
+            throw new NotImplementedException();
         }
     }
 }
