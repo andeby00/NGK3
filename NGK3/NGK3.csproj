@@ -8,4 +8,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="Hubs\" />
+    <Folder Include="Data\Models\" />
+  </ItemGroup>
+
 </Project>
