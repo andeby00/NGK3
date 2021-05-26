@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NGK3.Data.Models;
 
 namespace NGK3.Data
@@ -15,28 +17,25 @@ namespace NGK3.Data
             _context = context;
         }
         
-        public List<WeatherForecast> GetLatestForecasts()
+        public Task<List<WeatherForecast>>  GetLatestForecasts()
         {
-            var temp = from weatherForecasts in _context.WeatherForecasts 
-                orderby weatherForecasts.Date
-                select weatherForecasts;
+            return _context.WeatherForecasts.Take(3).OrderByDescending(forecast => forecast.Date).ToListAsync();
+        }
 
-            var temp2 = temp.ToArray();
+        public Task<List<WeatherForecast>> GetForecastsBy(DateTime date)
+        {
+            return _context.WeatherForecasts.Where(forecast => forecast.Date == date).ToListAsync();
+        }
 
-            var var = new List<WeatherForecast>();
-            for (int i = 0; i < 3; i++)
-            {
-                try
-                {
-                    var.Add(temp2[i]);
-                }
-                catch
-                {
-                    break;
-                }
-            }
+        public async Task<ActionResult<List<WeatherForecast>>> GetForecastsBetween(DateTime startdate, DateTime enddate)
+        {
+            return _context.WeatherForecasts.Where(forecast => (startdate <= forecast.Date && forecast.Date <= enddate)).ToListAsync();
+        }
 
-            return var;
+        public void SeedDummy(WeatherForecast[] list)
+        {
+            _context.AddRange(list);
+            _context.SaveChanges();
         }
     }
 }
