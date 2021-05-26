@@ -2,11 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using NGK3.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using NGK3.Data.Models;
 using static BCrypt.Net.BCrypt;
 
@@ -17,11 +22,13 @@ namespace NGK3.Controllers
     public class AccountController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly AppSettings _appSettings;
         const int BcryptWorkfactor = 10;
 
-        public AccountController(ApplicationDbContext context)
+        public AccountController(ApplicationDbContext context, IOptions<AppSettings> appSettings)
         {
             _context = context;
+            _appSettings = appSettings.Value;
         }
 
         [HttpPost("register"), AllowAnonymous]
@@ -61,7 +68,7 @@ namespace NGK3.Controllers
         }
 
         [HttpPost("login"), AllowAnonymous]
-        public async Task<ActionResult<UserDto>> Login(UserDto login)
+        public async Task<ActionResult<TokenDto>> Login(UserDto login)
         {
             login.Email = login.Email.ToLower();
             var user = await _context.Users.Where(u =>
@@ -71,11 +78,32 @@ namespace NGK3.Controllers
                 var validPwd = Verify(login.Password, user.PwHash);
                 if (validPwd)
                 {
-                    return login;
+                    var token = new TokenDto();
+                    token.JWT = GenerateToken(user);
+                    return token;
                 }
             }
             ModelState.AddModelError(string.Empty, "Forkert brugernavn eller password");
             return BadRequest(ModelState);
+        }
+
+        private string GenerateToken(User user)
+        {
+            var claims = new Claim[]
+            {
+                new Claim("Email", user.Email),
+                new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
+                new Claim("UserId", user.UserId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Exp,
+                    new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
+            };
+            var key = Encoding.ASCII.GetBytes(_appSettings.SecretKey);
+            var token = new JwtSecurityToken(
+                        new JwtHeader(new SigningCredentials(
+                            new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)),
+                            new JwtPayload(claims));
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
