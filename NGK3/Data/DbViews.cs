@@ -27,9 +27,9 @@ namespace NGK3.Data
             return _context.WeatherForecasts.Where(forecast => forecast.Date == date).ToListAsync();
         }
 
-        public async Task<ActionResult<List<WeatherForecast>>> GetForecastsBetween(DateTime startdate, DateTime enddate)
+        public Task<List<WeatherForecast>> GetForecastsBetween(DateTime startdate, DateTime enddate)
         {
-            return _context.WeatherForecasts.Where(forecast => (startdate <= forecast.Date && forecast.Date <= enddate)).ToListAsync();
+            return _context.WeatherForecasts.Where(forecast => startdate <= forecast.Date && forecast.Date <= enddate).ToListAsync();
         }
 
         public void SeedDummy(WeatherForecast[] list)
