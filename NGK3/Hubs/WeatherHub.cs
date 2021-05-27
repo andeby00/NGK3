@@ -7,10 +7,5 @@ using Microsoft.AspNetCore.SignalR;
 namespace NGK3.Hubs
 {
     public class WeatherHub : Hub
-    {
-        public async Task SendMessage(string user, string message)
-        {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
-        }
-    }
+    { }
 }

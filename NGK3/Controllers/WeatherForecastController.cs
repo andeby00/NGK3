@@ -15,7 +15,7 @@ namespace NGK3.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     public class WeatherForecastController : ControllerBase
     {
         IHubContext<WeatherHub> _weatherHubContext;

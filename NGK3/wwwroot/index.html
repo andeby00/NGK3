@@ -28,49 +28,29 @@
         </h2>
         <div>
             <label> Location: </label>
-            <input type="text" readonly id="liveLocationName" />
-            <!--<span id="liveLocationName"></span>-->(<span id="liveLocationLat">50</span>, <span id="liveLocationLon">20</span>)
+            <span id="liveLocationName"> </span> (<span id="liveLocationLat"></span>, <span id="liveLocationLon"></span>)
         </div>
         <div>
             <label> DateTime: </label>
-            <span id="liveDateTime"> 2040 </span>
+            <span id="liveDateTime">  </span>
         </div>
         <div>
             <label> Temperature: </label>
-            <span id="liveTemperature"> 20.5 </span>
+            <span id="liveTemperature">  </span>
         </div>
         <div>
             <label> Humidity: </label>
-            <span id="liveHumidity"> 10 </span>
+            <span id="liveHumidity">  </span>
         </div>
         <div>
             <label> Air Pressure: </label>
-            <span id="liveAirPressure"> 1000.0 </span>
+            <span id="liveAirPressure">  </span>
         </div>
     </div>
-    <div>
-        <h2> Fetch Data: </h2>
-        <table id="fetchedData" border="1">
-            <tr>
-                <th>Location</th>
-                <th>DateTime</th>
-                <th>Temperature</th>
-                <th>Humidity</th>
-                <th>AirPressure</th>
-            </tr>
-        </table>
-        <div>
-            <div style="margin-top: 10px"><input type="button" id="getLatests" value="Get latest forecasts" /></div>
-            <div style="margin-top: 10px"><input type="button" id="getForecastBy" value="Get forecasts for:" style="margin-right: 10px" /><input type="text" id="getForecastByText" /></div>
-            <div style="margin-top: 10px"><input type="button" id="getForecastsBetween" value="Get Forecasts Between:" style="margin-right: 10px" /><input type="text" id="getForecastBetweenStart" /> and <input type="text" id="getForecastBetweenend" /></div>
-        </div>
-    </div>
-    <div style="margin-top: 100px">
+    <div style="margin-top: 25px">
         <input type="button" id="generateForecast" value="Generate new forecast" />
     </div>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/@microsoft/signalr@3.0.1/dist/browser/signalr.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@microsoft/signalr@3.0.1/dist/browser/signalr.js" ></script>
     <script src="js/forecast.js"></script>
 </body>
 </html>
