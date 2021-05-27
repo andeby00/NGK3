@@ -19,7 +19,7 @@ namespace NGK3.Data
         
         public Task<List<WeatherForecast>>  GetLatestForecasts()
         {
-            return _context.WeatherForecasts.Take(3).OrderByDescending(forecast => forecast.Date).ToListAsync();
+            return _context.WeatherForecasts.Include(f => f.Location).Take(3).OrderByDescending(forecast => forecast.Date).ToListAsync();
         }
 
         public Task<List<WeatherForecast>> GetForecastsBy(DateTime date)

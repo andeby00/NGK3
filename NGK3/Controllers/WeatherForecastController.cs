@@ -97,14 +97,24 @@ namespace NGK3.Controllers
             return await _db.GetForecastsBetween(startdate, enddate);
         }
 
-        [HttpPost("LiveUpdate")]
-        public async Task<IActionResult> GetLiveUpdate(WeatherForecast forecast)
+        [HttpGet("GenerateForecast")]
+        public async Task<IActionResult> GenerateForecast()
         {
             try
             {
-                _db.SeedForecast(forecast);
+                var rng = new Random();
+                var var = new WeatherForecast
+                    {
+                        Date = DateTime.Now.AddDays(rng.Next(0,6)),
+                        Location = new Location { Name = "Chokoladen", Lat = 56.17, Lon = 10.18 },
+                        TemperatureC = rng.Next(-20, 55),
+                        Humidity = rng.Next(0, 101),
+                        AirPressure = rng.Next(980, 1030)
+                    };
 
-                await _weatherHubContext.Clients.All.SendAsync("liveUpdate", forecast);
+                _db.SeedForecast(var);
+
+                await _weatherHubContext.Clients.All.SendAsync("liveUpdate", var);
 
                 return Ok();
             }
