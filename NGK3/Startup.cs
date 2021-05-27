@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NGK3.Data;
+using NGK3.Hubs;
 
 namespace NGK3
 {
@@ -33,6 +34,7 @@ namespace NGK3
         {
 
             services.AddControllers();
+            services.AddSignalR();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NGK3", Version = "v1" });
@@ -91,6 +93,7 @@ namespace NGK3
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<WeatherHub>("/weatherHub");
             });
         }
     }

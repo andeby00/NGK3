@@ -37,5 +37,11 @@ namespace NGK3.Data
             _context.AddRange(list);
             _context.SaveChanges();
         }
+
+        public void SeedForecast(WeatherForecast forecast)
+        {
+            _context.Add(forecast);
+            _context.SaveChanges();
+        }
     }
 }
