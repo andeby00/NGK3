@@ -29,7 +29,7 @@ namespace NGK3.Data
 
         public Task<List<WeatherForecast>> GetForecastsBetween(DateTime startdate, DateTime enddate)
         {
-            return _context.WeatherForecasts.Where(forecast => startdate <= forecast.Date && forecast.Date <= enddate).ToListAsync();
+            return _context.WeatherForecasts.Include(forecast => forecast.Location).Where(forecast => startdate <= forecast.Date && forecast.Date <= enddate).ToListAsync();
         }
 
         public void SeedDummy(WeatherForecast[] list)
