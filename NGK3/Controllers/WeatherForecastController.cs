@@ -47,7 +47,7 @@ namespace NGK3.Controllers
                 TemperatureC = rng.Next(-20, 55),
                 Humidity = rng.Next(0, 101),
                 AirPressure = rng.Next(980, 1030)
-
+                    
             })
             .ToArray();
         }
@@ -80,19 +80,19 @@ namespace NGK3.Controllers
         }
 
         [HttpGet("Latest")]
-        public async Task<ActionResult<IList<WeatherForecast>>> GetLatetestForecasts()
+        public async Task<ActionResult<List<WeatherForecast>>> GetLatetestForecasts()
         {
             return await _db.GetLatestForecasts();
         }
         
         [HttpGet("{date}")]
-        public async Task<ActionResult<IList<WeatherForecast>>> GetWeatherForecast(DateTime date)
+        public async Task<ActionResult<List<WeatherForecast>>> GetWeatherForecasts(DateTime date)
         {
             return await _db.GetForecastsBy(date);
         }
         
         [HttpGet("{startdate}/{enddate}")]
-        public async Task<ActionResult<IList<WeatherForecast>>> GetWeatherForecast(DateTime startdate, DateTime enddate)
+        public async Task<ActionResult<List<WeatherForecast>>> GetWeatherForecasts(DateTime startdate, DateTime enddate)
         {
             return await _db.GetForecastsBetween(startdate, enddate);
         }
