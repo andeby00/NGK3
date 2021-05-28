@@ -24,7 +24,7 @@ namespace NGK3.Data
 
         public Task<List<WeatherForecast>> GetForecastsBy(DateTime date)
         {
-            return _context.WeatherForecasts.Where(f => f.Date.Year == date.Year & f.Date.Month == date.Month & f.Date.Day == date.Day).ToListAsync();
+            return _context.WeatherForecasts.Include(forecast => forecast.Location).Where(f => f.Date.Year == date.Year & f.Date.Month == date.Month & f.Date.Day == date.Day).ToListAsync();
         }
 
         public Task<List<WeatherForecast>> GetForecastsBetween(DateTime startdate, DateTime enddate)

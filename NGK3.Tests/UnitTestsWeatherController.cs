@@ -19,9 +19,7 @@ namespace NGK3.Tests
 {
     public class Tests
     {
-
         private ApplicationDbContext _context;
-        private IOptions<AppSettings> _appSettings;
         private IHubContext<WeatherHub> _hub;
         private ILogger<WeatherForecastController> _logger;
         private WeatherForecastController _controller;
@@ -38,11 +36,6 @@ namespace NGK3.Tests
                 conn.Open();
                 return conn;
             }
-
-            var settings = new AppSettings()
-            {
-                SecretKey = "ncSK45=)7@#qwKDSopevvkj3274687236"
-            };
 
             _hub = Substitute.For<IHubContext<WeatherHub>>();
             _logger = Substitute.For<ILogger<WeatherForecastController>>();
