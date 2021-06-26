@@ -1,5 +1,4 @@
 ﻿
-
 var connection = new signalR.HubConnectionBuilder().withUrl("/weatherHub").build();
 
 //Disable send button until connection is established
@@ -11,21 +10,27 @@ connection.start().then(function () {
     return console.error(err.toString());
 });
 
-connection.on("liveUpdate", function (forecast) {
-    document.getElementById("liveLocationName").textContent = forecast.location.name;
-    document.getElementById("liveLocationLat").textContent = forecast.location.lat;
-    document.getElementById("liveLocationLon").textContent = forecast.location.lon;
-    document.getElementById("liveDateTime").textContent = forecast.date;
-    document.getElementById("liveTemperature").textContent = forecast.temperatureC;
-    document.getElementById("liveHumidity").textContent = forecast.humidity;
-    document.getElementById("liveAirPressure").textContent = forecast.airPressure;
+connection.on("liveUpdate", function () {
+    getLatestForcast();
 });
 
 document.getElementById("generateForecast").addEventListener("click", function (event) {
+    let temp = {
+        Date: new Date(),
+        Location: {
+            Name: "Chokoladen",
+            Lat: 56.17,
+            Lon: 10.18
+        },
+        TemperatureC: Math.floor(Math.random() * 56) - 20,
+        Humidity: Math.floor(Math.random() * 101),
+        AirPressure: Math.floor(Math.random() * 1031) + 980
+    };
     fetch('api/WeatherForecast/GenerateForecast',
         {
-            method: "GET",
+            method: "POST",
             credentials: "include",
+            body: JSON.stringify(temp),
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem("token"),
                 'Content-Type': 'application/json'
@@ -38,6 +43,34 @@ document.getElementById("generateForecast").addEventListener("click", function (
     event.preventDefault();
 });
 
+async function getLatestForcast() {
+    try {
+        let response = await fetch('api/WeatherForecast/Latest',
+            {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                    'Content-Type': 'application/json'
+                }
+            });
+        if (response.ok) {
+            let forecast = await response.json();
+            document.getElementById("liveLocationName").textContent = forecast.location.name;
+            document.getElementById("liveLocationLat").textContent = forecast.location.lat;
+            document.getElementById("liveLocationLon").textContent = forecast.location.lon;
+            document.getElementById("liveDateTime").textContent = forecast.date;
+            document.getElementById("liveTemperature").textContent = forecast.temperatureC;
+            document.getElementById("liveHumidity").textContent = forecast.humidity;
+            document.getElementById("liveAirPressure").textContent = forecast.airPressure;
+        } else {
+            alert("Server returned: " + response.statusText);
+        }
+    } catch (err) {
+        alert("Error: " + err);
+    }
+}
+
 async function login() {
     let temp = {
         email: document.getElementById("textEmail").value,
@@ -49,7 +82,7 @@ async function login() {
                 method: "POST",
                 body: JSON.stringify(temp),
                 headers: new Headers({
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/json"
                 })
             });
         if (response.ok) {
@@ -63,7 +96,8 @@ async function login() {
     } catch (err) {
         alert("Error: " + err);
     }
-    return;}
+    return;
+}
 
 document.getElementById("loginButton").addEventListener("click", function (event) {
     login();

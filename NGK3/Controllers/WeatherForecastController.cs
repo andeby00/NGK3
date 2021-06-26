@@ -79,10 +79,16 @@ namespace NGK3.Controllers
             }
         }
 
-        [HttpGet("Latest")]
-        public async Task<ActionResult<List<WeatherForecast>>> GetLatetestForecasts()
+        [HttpGet("Latests")]
+        public async Task<ActionResult<List<WeatherForecast>>> GetLatestForecasts()
         {
             return await _db.GetLatestForecasts();
+        }
+
+        [HttpGet("Latest")]
+        public async Task<ActionResult<WeatherForecast>> GetLatestForecast()
+        {
+            return await _db.GetLatestForecast();
         }
         
         [HttpGet("{date}")]
@@ -97,24 +103,14 @@ namespace NGK3.Controllers
             return await _db.GetForecastsBetween(startdate, enddate);
         }
 
-        [HttpGet("GenerateForecast")]
-        public async Task<IActionResult> GenerateForecast()
+        [HttpPost("GenerateForecast")]
+        public async Task<IActionResult> GenerateForecast(WeatherForecast forecast)
         {
             try
             {
-                var rng = new Random();
-                var var = new WeatherForecast
-                    {
-                        Date = DateTime.Now.AddDays(rng.Next(0,6)),
-                        Location = new Location { Name = "Chokoladen", Lat = 56.17, Lon = 10.18 },
-                        TemperatureC = rng.Next(-20, 55),
-                        Humidity = rng.Next(0, 101),
-                        AirPressure = rng.Next(980, 1030)
-                    };
+                _db.SeedForecast(forecast);
 
-                _db.SeedForecast(var);
-
-                await _weatherHubContext.Clients.All.SendAsync("liveUpdate", var);
+                await _weatherHubContext.Clients.All.SendAsync("liveUpdate");
 
                 return Ok();
             }

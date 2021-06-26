@@ -22,6 +22,11 @@ namespace NGK3.Data
             return _context.WeatherForecasts.Include(f => f.Location).Take(3).OrderByDescending(forecast => forecast.Date).ToListAsync();
         }
 
+        public Task<WeatherForecast> GetLatestForecast()
+        {
+            return _context.WeatherForecasts.Include(f => f.Location).OrderByDescending(forecast => forecast.Date).FirstOrDefaultAsync();
+        }
+
         public Task<List<WeatherForecast>> GetForecastsBy(DateTime date)
         {
             return _context.WeatherForecasts.Include(forecast => forecast.Location).Where(f => f.Date.Year == date.Year & f.Date.Month == date.Month & f.Date.Day == date.Day).ToListAsync();
